@@ -1,0 +1,20 @@
+{
+  "name": "bork-i",
+  "version": "1.0.0",
+  "description": "A text-based adventure game heavily based off of Zork 1: The Great Underground Empire.",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "nodemon",
+    "start": "ts-node ./src/index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^22.5.4",
+    "nodemon": "^3.1.4",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.2"
+  }
+}

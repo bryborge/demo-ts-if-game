@@ -1,5 +1,7 @@
 import readline from 'readline';
 import { Command, CommandParser } from './CommandParser';
+import { World } from './World';
+import { WorldFactory } from './WorldFactory';
 
 /**
  * A helper function that wraps `readline.question`.
@@ -24,6 +26,7 @@ const userCommand = (command: string): Promise<string> => {
 export class Game {
   running: boolean;
   parser: CommandParser;
+  world: World;
 
   /**
    * Initializes a new instance of Game.
@@ -31,6 +34,7 @@ export class Game {
   constructor() {
     this.running = true;
     this.parser = new CommandParser();
+    this.world = WorldFactory.createDefaultWorld();
   }
 
   /**
@@ -40,11 +44,10 @@ export class Game {
   async gameLoop() {
     console.log('Bork I: The Tiny Subterranean Syndicate');
     console.log('');
-    console.log('You are standing in an open field west of an abandoned warehouse.');
-    console.log('Your phone *pings* to let you know you have a new email message.');
-    console.log('');
 
     while (this.running) {
+      console.log(this.world.describeCurrentRoom());
+
       const commandInput = await userCommand('> ');
       const command      = this.parser.parse(commandInput);
 
@@ -63,8 +66,8 @@ export class Game {
     if (action === 'quit') {
       console.log('Thanks for playing! Goodbye.')
       this.running = false;
-    } else if (action === 'move') {
-      this.movePlayer(target);
+    } else if (action === 'move' || action === 'go') {
+      this.handleMovement(target);
     } else if (action === 'take') {
       this.takeItem(target);
     } else {
@@ -73,13 +76,19 @@ export class Game {
   }
 
   /**
-   * Move the player in a given direction.
+   * Handles a movement command, given as a direction string (or null if not
+   * a valid movement command).
    *
-   * @param target The direction to move (e.g. 'north', 'south', etc.). If this
-   * is null, no action is taken.
+   * @param direction The direction to move, or null if not a valid movement
+   * command. If null, a message is printed to the user that they can't go that
+   * way.
    */
-  movePlayer(target: string | null) {
-    console.log(`You moved direction: ${target}.`);
+  handleMovement(direction: string | null) {
+    if (direction) {
+      console.log(this.world.movePlayer(direction));
+    } else {
+      console.log('You can\'t go that way.');
+    }
   }
 
   

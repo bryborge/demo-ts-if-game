@@ -1,5 +1,6 @@
 import readline from 'readline';
 import { Command, CommandParser } from './CommandParser';
+import { Player } from './Player';
 import { World } from './World';
 import { WorldFactory } from './WorldFactory';
 
@@ -26,6 +27,7 @@ const userCommand = (command: string): Promise<string> => {
 export class Game {
   running: boolean;
   parser: CommandParser;
+  player: Player;
   world: World;
 
   /**
@@ -35,6 +37,7 @@ export class Game {
     this.running = true;
     this.parser = new CommandParser();
     this.world = WorldFactory.createDefaultWorld();
+    this.player = new Player('Player 1', this.world.startingRoom);
   }
 
   /**
@@ -42,11 +45,11 @@ export class Game {
    * and confirms that choice.
    */
   async gameLoop() {
-    console.log('Bork I: The Tiny Subterranean Syndicate');
+    console.log('Mind Palace');
     console.log('');
 
     while (this.running) {
-      console.log(this.world.describeCurrentRoom());
+      console.log(this.player.describeCurrentLocation());
 
       const commandInput = await userCommand('> ');
       const command      = this.parser.parse(commandInput);
@@ -85,13 +88,12 @@ export class Game {
    */
   handleMovement(direction: string | null) {
     if (direction) {
-      console.log(this.world.movePlayer(direction));
+      console.log(this.player.move(direction));
     } else {
       console.log('You can\'t go that way.');
     }
   }
 
-  
   /**
    * Take an item at a given location..
    *

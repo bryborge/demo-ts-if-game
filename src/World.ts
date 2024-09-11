@@ -1,6 +1,7 @@
+import { WorldInterface } from './common/interfaces';
 import { Room } from './Room';
 
-export class World {
+export class World implements WorldInterface {
   startingRoom: Room;
 
   /**

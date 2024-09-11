@@ -1,4 +1,6 @@
-export class Room {
+import { RoomInterface } from "./common/interfaces";
+
+export class Room implements RoomInterface {
   name: string;
   description: string;
   exits: { [direction: string]: Room };
@@ -23,6 +25,11 @@ export class Room {
    */
   addExit(direction: string, room: Room) {
     this.exits[direction] = room;
+  }
+
+  getItemInRoom(item: string): string | null {
+    // TODO: Build out item retrieval
+    return null;
   }
 
   /**

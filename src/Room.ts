@@ -1,9 +1,11 @@
 import { RoomInterface } from "./common/interfaces";
+import { GameObject } from "./GameObject/GameObject";
 
 export class Room implements RoomInterface {
   name: string;
   description: string;
   exits: { [direction: string]: Room };
+  objects: GameObject[];
 
   /**
    * Initializes a new instance of Room.
@@ -11,10 +13,22 @@ export class Room implements RoomInterface {
    * @param name The name of the room.
    * @param description A longer description of the room.
    */
-  constructor(name: string, description: string) {
+  constructor(name: string, description: string, objects: GameObject[]) {
     this.name        = name;
     this.description = description;
     this.exits       = {};
+    this.objects     = objects;
+  }
+
+  describe(): string {
+    let fullDescription = `${this.description}\nObjects in the room: `;
+
+    if (this.objects.length > 0) {
+      fullDescription += this.objects.map(o => o.name).join(', ');
+    } else {
+      fullDescription += "There appears to be nothing in the room.";
+    }
+    return fullDescription;
   }
 
   /**
@@ -27,9 +41,45 @@ export class Room implements RoomInterface {
     this.exits[direction] = room;
   }
 
-  getItemInRoom(item: string): string | null {
-    // TODO: Build out item retrieval
-    return null;
+  /**
+   * Adds the given object to the room.
+   *
+   * @param object The object to add.
+   */
+  addObject(object: GameObject) {
+    this.objects.push(object);
+  }
+
+  /**
+   * Removes the given object from the room.
+   *
+   * @param object The object to remove.
+   */
+  removeObject(object: GameObject) {
+    this.objects = this.objects.filter(o => o !== object);
+  }
+
+  /**
+   * Returns a string describing the given object.
+   *
+   * @param object The object to describe.
+   * @returns A string describing the object.
+   */
+  describeObject(object: GameObject): string {
+    return object.describe();
+  }
+
+  /**
+   * Gets an object from the room by name.
+   *
+   * @param name The name of the object to retrieve.
+   * @returns The object with the given name, or undefined if no object with that
+   * name exists in the room.
+   */
+  getObject(name: string): GameObject | undefined {
+    const object = this.objects.find(o => o.name === name);
+
+    return object;
   }
 
   /**

@@ -1,11 +1,12 @@
 import { CommandParser } from "../CommandParser";
+import { GameObject } from "../GameObject/GameObject";
 import { Player } from "../Player";
 import { Room } from "../Room";
 import { World } from "../World";
 
 export interface Command {
   action: string;
-  target: string | null;
+  target: string;
 };
 
 export interface GameInterface {
@@ -13,6 +14,12 @@ export interface GameInterface {
   parser: CommandParser;
   player: Player;
   world: World;
+}
+
+export interface GameObjectInterface {
+  name: string;
+  description: string;
+  examinable: boolean;
 }
 
 export interface PlayerInterface {
@@ -24,6 +31,7 @@ export interface RoomInterface {
   name: string;
   description: string;
   exits: { [direction: string]: Room };
+  objects: GameObject[];
 }
 
 export interface WorldInterface {

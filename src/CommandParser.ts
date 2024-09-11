@@ -8,10 +8,12 @@ export class CommandParser {
    * @returns A Command object with the action and target.
    */
   parse(command: string): Command {
-    const words  = command.split(' ');
+    // TODO: Make parser more robust
+    const words = command.split(' ');
     const action = words[0];
-    const target = words[1] || null;
+    const target = words[1];
 
+    // TODO: Handle invalid actions / targets
     return { action, target };
   }
 }

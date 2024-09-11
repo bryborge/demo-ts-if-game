@@ -1,4 +1,5 @@
 import { PlayerInterface } from './common/interfaces';
+import { GameObject } from './GameObject/GameObject';
 import { Room } from './Room';
 
 export class Player implements PlayerInterface {
@@ -34,26 +35,19 @@ export class Player implements PlayerInterface {
   }
 
   /**
-   * Interacts with the given item in the current room.
+   * Examine the given object in the current room.
    *
-   * @param target The item to interact with.
-   * @returns A message indicating success or failure of the interaction.
+   * @param object The object to examine.
+   * @returns A string describing the object.
    */
-  interact(target: string): string {
-    const item = this.location.getItemInRoom(target);
-
-    if (item) {
-      // TODO: Build out item interactions
-      return `You interact with ${target}.`;
-    } else {
-      return `There is no ${target} here.`;
-    }
+  examineObject(object: GameObject): string  {
+    return this.location.describeObject(object);
   }
 
   /**
    * Returns a string describing the room the player is currently in.
    */
   describeCurrentLocation(): string {
-    return this.location.description;
+    return this.location.describe();
   }
 }

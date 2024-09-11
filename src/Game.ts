@@ -36,9 +36,9 @@ export class Game implements GameInterface {
    */
   constructor() {
     this.running = true;
-    this.parser  = new CommandParser();
-    this.world   = WorldFactory.createDefaultWorld();
-    this.player  = new Player('Player 1', this.world.startingRoom);
+    this.parser = new CommandParser();
+    this.world = WorldFactory.createDefaultWorld();
+    this.player = new Player('Player 1', this.world.startingRoom);
   }
 
   /**
@@ -77,7 +77,7 @@ export class Game implements GameInterface {
       this.running = false;
     } else if (action === 'move' || action === 'go') {
       this.handleMovement(target);
-    } else if (action === 'look' || action === 'take') {
+    } else if (action === 'examine' ) {
       this.handleInteraction(target);
     } else {
       console.log(`I don't understand the command: ${action}`);
@@ -102,18 +102,20 @@ export class Game implements GameInterface {
   }
 
   /**
-   * Handles an interaction command, given as a target string (or null if not
-   * a valid interaction command).
+   * Handles an interaction command, given as a target string.
    *
    * @param target The target of the interaction, or null if not a valid interaction
    * command. If null, a message is printed to the user that they can't do that.
    * @returns void
    */
-  handleInteraction(target: string | null): void {
-    if (target) {
-      console.log(this.player.interact(target));
+  handleInteraction(target: string ): void {
+    // TODO: Add more interactions than just examine (e.g. take, talk, etc.)
+    const targetObject = this.player.location.getObject(target);
+
+    if (targetObject) {
+      console.log(this.player.examineObject(targetObject));
     } else {
-      console.log("You can't do that.");
+      console.log(`There is no ${target} here.`);
     }
   }
 }

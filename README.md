@@ -1,6 +1,7 @@
-# Demo: Text-based Adventure Game
+# Demo: Interactive Fiction Game
 
-This project demonstrates the various components of a console-based Interactive Fiction (IF) game using Typescript.
+This project demonstrates the various components of a text-based Interactive Fiction (IF) game called 'Mind Palace'
+using Typescript.
 
 ## Architecture Overview
 

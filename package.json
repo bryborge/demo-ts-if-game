@@ -1,7 +1,7 @@
 {
-  "name": "bork-i",
+  "name": "mind-palace",
   "version": "1.0.0",
-  "description": "A text-based adventure game heavily based off of Zork 1: The Great Underground Empire.",
+  "description": "A text-based interactive fiction game.",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",

@@ -1,11 +1,11 @@
-# Demo: Interactive Fiction Game
+# 📃 Demo: Interactive Fiction Game
 
 This project demonstrates the various components of a text-based Interactive Fiction (IF) game called 'Mind Palace'
 using Typescript.
 
-## Architecture Overview
+## Built With
 
-### Built With
+*   [Typescript](https://www.typescriptlang.org/) - A strongly typed superset of JavaScript
 
 ## Getting Started
 
@@ -14,8 +14,24 @@ purposes.
 
 ### Prerequisites
 
+*   [NodeJS](https://nodejs.org) - A free, open-source, cross-platform JavaScript runtime environment.
+
 ### Installation
 
-*   `npm run dev` - starts the application in development mode and watches for file changes
+1.  Install the project dependencies
 
-## Testing
+    ```sh
+    npm install
+    ```
+
+2.  Start the application in development mode (which watches for file changes and reloads as needed)
+
+    ```sh
+    npm run dev
+    ```
+
+    Alternatively, you can start the application manually after applying file changes
+
+    ```sh
+    npm run start
+    ```

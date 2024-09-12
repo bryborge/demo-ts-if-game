@@ -21,13 +21,16 @@ export class Room implements RoomInterface {
   }
 
   describe(): string {
-    let fullDescription = `${this.description}\nObjects in the room: `;
+    let fullDescription = `${this.description}\n\tObjects: `;
 
     if (this.objects.length > 0) {
       fullDescription += this.objects.map(o => o.name).join(', ');
     } else {
-      fullDescription += "There appears to be nothing in the room.";
+      fullDescription += "There appears to be nothing here.";
     }
+
+    fullDescription += `\n\tExits: ${Object.keys(this.exits).join(', ')}`
+
     return fullDescription;
   }
 

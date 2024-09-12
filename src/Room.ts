@@ -29,7 +29,7 @@ export class Room implements RoomInterface {
       fullDescription += "There appears to be nothing here.";
     }
 
-    fullDescription += `\n\tExits: ${Object.keys(this.exits).join(', ')}`
+    fullDescription += `\n\tDirections: ${Object.keys(this.exits).join(', ')}`
 
     return fullDescription;
   }

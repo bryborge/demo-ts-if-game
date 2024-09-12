@@ -4,6 +4,7 @@ import { CommandParser } from './CommandParser';
 import { Player } from './Player';
 import { World } from './World';
 import { WorldFactory } from './WorldFactory';
+import { GameObject } from './GameObject/GameObject';
 
 /**
  * A helper function that wraps `readline.question`.
@@ -78,7 +79,9 @@ export class Game implements GameInterface {
     } else if (action === 'move' || action === 'go') {
       this.handleMovement(target);
     } else if (action === 'examine' ) {
-      this.handleInteraction(target);
+      this.handleExamine(target);
+    } else if (action === 'open' ) {
+      this.handleOpen(target);
     } else {
       console.log(`I don't understand the command: ${action}`);
     }
@@ -108,14 +111,32 @@ export class Game implements GameInterface {
    * command. If null, a message is printed to the user that they can't do that.
    * @returns void
    */
-  handleInteraction(target: string ): void {
-    // TODO: Add more interactions than just examine (e.g. take, talk, etc.)
+  handleExamine(target: string ): void {
     const targetObject = this.player.location.getObject(target);
 
     if (targetObject) {
       console.log(this.player.examineObject(targetObject));
     } else {
-      console.log(`There is no ${target} here.`);
+      console.log(this.handleNoTarget(target));
     }
+  }
+
+  handleOpen(target: string): void {
+    const targetObject = this.player.location.getObject(target);
+
+    if (targetObject) {
+      const { message, contents } = targetObject.open();
+      console.log(message);
+
+      if (contents.length > 0) {
+        contents.forEach((item: GameObject) => this.player.location.addObject(item));
+      }
+    } else {
+      console.log(this.handleNoTarget(target));
+    }
+  }
+
+  handleNoTarget(target: string): string {
+    return `There is no ${target} here.`
   }
 }

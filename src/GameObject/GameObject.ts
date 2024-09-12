@@ -34,4 +34,8 @@ export  class GameObject implements GameObjectInterface {
       return `There's nothing significant about the ${this.name}`
     }
   }
+
+  open(): any {
+    throw new Error('Method not implemented.');
+  }
 }

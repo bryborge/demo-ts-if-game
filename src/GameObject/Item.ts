@@ -24,7 +24,7 @@ export class Item extends GameObject {
     isTaken: boolean = false,
     contents: GameObject[] = []
   ) {
-    super(name, description, true);
+    super(name, description, true, contents);
 
     this.openable = openable;
     this.takeable = takeable;
@@ -47,7 +47,9 @@ export class Item extends GameObject {
       if (!this.isOpen) {
         this.isOpen = true;
         const contentNames = this.contents.map(obj => obj.name).join(', ');
-        const message = this.contents.length > 0 ? `You open the ${this.name}. Inside, you find: ${contentNames}.` : `You open the ${this.name}.`;
+        const message = this.contents.length > 0
+          ? `You open the ${this.name}. Inside, you find: ${contentNames}.`
+          : `You open the ${this.name}, but it's empty.`;
         return  { message, contents: this.contents };
       } else {
         return { message: `The ${this.name} is already open.`, contents: [] };
@@ -55,5 +57,23 @@ export class Item extends GameObject {
     }
 
     return { message: `The ${this.name} cannot be opened.`, contents: [] };
+  }
+
+  close(): string {
+    if (this.isOpen) {
+      this.isOpen = false;
+      return `You close the ${this.name}.`;
+    } else {
+      return `The ${this.name} is already closed.`;
+    }
+  }
+
+  /**
+   * Removes the given object from the item's contents.
+   *
+   * @param object The object to remove from the item's contents.
+   */
+  removeContent(object: GameObject): void {
+    this.contents = this.contents.filter(obj => obj !== object);
   }
 }

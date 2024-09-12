@@ -6,6 +6,7 @@ export  class GameObject implements GameObjectInterface {
   examinable: boolean;
   isTaken: any;
   takeable: any;
+  contents: GameObject[];
 
   /**
    * Initializes a new instance of GameObject.
@@ -17,11 +18,13 @@ export  class GameObject implements GameObjectInterface {
   constructor(
     name: string,
     description: string,
-    examinable: boolean
+    examinable: boolean,
+    contents: GameObject[]
   ) {
     this.name = name;
     this.description = description;
     this.examinable = examinable;
+    this.contents = contents;
   }
 
   /**
@@ -44,6 +47,20 @@ export  class GameObject implements GameObjectInterface {
    * Implement this method in the concrete class if the object is openable.
    */
   open(): any {
+    throw new Error('Method not implemented.');
+  }
+
+  /**
+   * Implement this method in the concrete class if the object is openable.
+   */
+  close(): any {
+    throw new Error('Method not implemented.');
+  }
+
+  /**
+   * Implement this method in the concrete class if the object is openable.
+   */
+  removeContent(_object: GameObject): void {
     throw new Error('Method not implemented.');
   }
 }

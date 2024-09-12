@@ -83,6 +83,8 @@ export class Game implements GameInterface {
       this.handleExamine(target);
     } else if (action === 'open') {
       this.handleOpen(target);
+    } else if (action === 'close') {
+      this.handleClose(target);
     } else if (action === 'take') {
       this.handleTake(target);
     } else if (action === 'drop') {
@@ -141,8 +143,28 @@ export class Game implements GameInterface {
       console.log(message);
 
       if (contents.length > 0) {
-        contents.forEach((item: GameObject) => this.player.location.addObject(item));
+        contents.forEach((item: GameObject) => {
+          this.player.location.addObject(item); // add the newly opened item's contents to the room
+          targetObject.removeContent(item);     // remove the item's contents from itself
+        });
       }
+    } else {
+      console.log(this.handleNoTarget(target));
+    }
+  }
+
+  /**
+   * Handles a close command, given as a target string.
+   *
+   * @param target The target of the interaction, or null if not a valid interaction
+   * command. If null, a message is printed to the user that they can't do that.
+   * @returns void
+   */
+  handleClose(target: string): void {
+    const targetObject = this.player.location.getObject(target);
+
+    if (targetObject) {
+      console.log(targetObject.close());
     } else {
       console.log(this.handleNoTarget(target));
     }
@@ -156,13 +178,17 @@ export class Game implements GameInterface {
    * @returns void
    */
   handleTake(target: string): void {
-    const targetObject = this.player.location.getObject(target) || this.player.getItemFromInventory(target);
+    const targetObjectInRoom = this.player.location.getObject(target);
+    const targetObjectInInventory = this.player.getItemFromInventory(target);
 
-    if (targetObject) {
-      console.log(this.player.takeObject(targetObject));
-      this.player.location.removeObject(targetObject);
+    if (targetObjectInInventory) {
+      console.log(`You already have the ${targetObjectInInventory.name}.`);
     } else {
-      console.log(this.handleNoTarget(target));
+      if (targetObjectInRoom) {
+        console.log(this.player.takeObject(targetObjectInRoom));
+      } else {
+        console.log(this.handleNoTarget(target));
+      }
     }
   }
 

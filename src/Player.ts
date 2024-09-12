@@ -56,6 +56,7 @@ export class Player implements PlayerInterface {
     if (object.takeable && !object.isTaken) {
       object.isTaken = true;
       this.inventory.push(object);
+      this.location.removeObject(object);
       return `You take the ${object.name}.`; 
     } else {
       return `You can't take the ${object.name}.`;

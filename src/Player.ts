@@ -63,6 +63,22 @@ export class Player implements PlayerInterface {
   }
 
   /**
+   * Drop the given object from your inventory.
+   *
+   * @param object The object to drop.
+   * @returns A string indicating success or failure of the drop.
+   */
+  dropObject(object: GameObject): string {
+    if (this.inventory.includes(object)) {
+      object.isTaken = false;
+      this.inventory = this.inventory.filter(o => o !== object);
+      return `You drop the ${object.name}.`;
+    } else {
+      return `You don't have the ${object.name}.`;
+    }
+  }
+
+  /**
    * Returns a string describing the player's current inventory.
    *
    * If the inventory is not empty, the string will be in the format:

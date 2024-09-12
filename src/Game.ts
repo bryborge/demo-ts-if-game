@@ -85,6 +85,8 @@ export class Game implements GameInterface {
       this.handleOpen(target);
     } else if (action === 'take') {
       this.handleTake(target);
+    } else if (action === 'drop') {
+      this.handleDrop(target);
     } else {
       console.log(`I don't understand the command: ${action}`);
     }
@@ -161,6 +163,25 @@ export class Game implements GameInterface {
       this.player.location.removeObject(targetObject);
     } else {
       console.log(this.handleNoTarget(target));
+    }
+  }
+
+  /**
+   * Handles a drop command, given as a target string.
+   *
+   * @param target The target of the interaction, or null if not a valid interaction
+   * command. If null, a message is printed to the user that they can't do that.
+   * @returns void
+   */
+  handleDrop(target: string): void {
+    const targetObject = this.player.getItemFromInventory(target);
+
+    if (targetObject) {
+      this.player.location.addObject(targetObject);
+      this.player.dropObject(targetObject);
+      console.log(`You drop the ${targetObject.name}.`);
+    } else {
+      console.log(`You can't drop the ${target}.`);
     }
   }
 

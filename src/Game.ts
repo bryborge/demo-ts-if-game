@@ -4,6 +4,7 @@ import { CommandParser } from './CommandParser';
 import { Player } from './Player';
 import { World } from './World';
 import { WorldFactory } from './WorldFactory';
+import { GameObject } from './GameObject/GameObject';
 
 /**
  * A helper function that wraps `readline.question`.
@@ -53,6 +54,7 @@ export class Game implements GameInterface {
 
     while (this.running) {
       console.log(this.player.describeCurrentLocation());
+      console.log(this.player.listInventory());
 
       const commandInput = await userCommand('> ');
       const command      = this.parser.parse(commandInput);
@@ -77,8 +79,16 @@ export class Game implements GameInterface {
       this.running = false;
     } else if (action === 'move' || action === 'go') {
       this.handleMovement(target);
-    } else if (action === 'examine' ) {
-      this.handleInteraction(target);
+    } else if (action === 'examine') {
+      this.handleExamine(target);
+    } else if (action === 'open') {
+      this.handleOpen(target);
+    } else if (action === 'close') {
+      this.handleClose(target);
+    } else if (action === 'take') {
+      this.handleTake(target);
+    } else if (action === 'drop') {
+      this.handleDrop(target);
     } else {
       console.log(`I don't understand the command: ${action}`);
     }
@@ -102,20 +112,113 @@ export class Game implements GameInterface {
   }
 
   /**
-   * Handles an interaction command, given as a target string.
+   * Handles an examine command, given as a target string.
    *
    * @param target The target of the interaction, or null if not a valid interaction
    * command. If null, a message is printed to the user that they can't do that.
    * @returns void
    */
-  handleInteraction(target: string ): void {
-    // TODO: Add more interactions than just examine (e.g. take, talk, etc.)
-    const targetObject = this.player.location.getObject(target);
+  handleExamine(target: string): void {
+    const targetObject = this.player.location.getObject(target) || this.player.getItemFromInventory(target);
 
     if (targetObject) {
       console.log(this.player.examineObject(targetObject));
     } else {
-      console.log(`There is no ${target} here.`);
+      console.log(this.handleNoTarget(target));
     }
+  }
+
+  /**
+   * Handles an open command, given as a target string.
+   *
+   * @param target The target of the interaction, or null if not a valid interaction
+   * command. If null, a message is printed to the user that they can't do that.
+   * @returns void
+   */
+  handleOpen(target: string): void {
+    const targetObject = this.player.location.getObject(target);
+
+    if (targetObject) {
+      const { message, contents } = targetObject.open();
+      console.log(message);
+
+      if (contents.length > 0) {
+        contents.forEach((item: GameObject) => {
+          this.player.location.addObject(item); // add the newly opened item's contents to the room
+          targetObject.removeContent(item);     // remove the item's contents from itself
+        });
+      }
+    } else {
+      console.log(this.handleNoTarget(target));
+    }
+  }
+
+  /**
+   * Handles a close command, given as a target string.
+   *
+   * @param target The target of the interaction, or null if not a valid interaction
+   * command. If null, a message is printed to the user that they can't do that.
+   * @returns void
+   */
+  handleClose(target: string): void {
+    const targetObject = this.player.location.getObject(target);
+
+    if (targetObject) {
+      console.log(targetObject.close());
+    } else {
+      console.log(this.handleNoTarget(target));
+    }
+  }
+
+  /**
+   * Handles a take command, given as a target string.
+   *
+   * @param target The target of the interaction, or null if not a valid interaction
+   * command. If null, a message is printed to the user that they can't do that.
+   * @returns void
+   */
+  handleTake(target: string): void {
+    const targetObjectInRoom = this.player.location.getObject(target);
+    const targetObjectInInventory = this.player.getItemFromInventory(target);
+
+    if (targetObjectInInventory) {
+      console.log(`You already have the ${targetObjectInInventory.name}.`);
+    } else {
+      if (targetObjectInRoom) {
+        console.log(this.player.takeObject(targetObjectInRoom));
+      } else {
+        console.log(this.handleNoTarget(target));
+      }
+    }
+  }
+
+  /**
+   * Handles a drop command, given as a target string.
+   *
+   * @param target The target of the interaction, or null if not a valid interaction
+   * command. If null, a message is printed to the user that they can't do that.
+   * @returns void
+   */
+  handleDrop(target: string): void {
+    const targetObject = this.player.getItemFromInventory(target);
+
+    if (targetObject) {
+      this.player.location.addObject(targetObject);
+      this.player.dropObject(targetObject);
+      console.log(`You drop the ${targetObject.name}.`);
+    } else {
+      console.log(`You can't drop the ${target}.`);
+    }
+  }
+
+  /**
+   * A helper function that returns a string that is used when the user tries to interact with something
+   * that doesn't exist in the current room.
+   *
+   * @param target The target of the interaction, which doesn't exist in the current room.
+   * @returns A string indicating that the target doesn't exist in the current room.
+   */
+  handleNoTarget(target: string): string {
+    return `There is no ${target} here.`
   }
 }

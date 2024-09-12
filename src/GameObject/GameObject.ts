@@ -1,10 +1,12 @@
 import { GameObjectInterface } from "../common/interfaces";
 
-// TODO: Make this an abstract class
 export  class GameObject implements GameObjectInterface {
-   name: string;
-   description: string;
-   examinable: boolean;
+  name: string;
+  description: string;
+  examinable: boolean;
+  isTaken: any;
+  takeable: any;
+  contents: GameObject[];
 
   /**
    * Initializes a new instance of GameObject.
@@ -13,10 +15,16 @@ export  class GameObject implements GameObjectInterface {
    * @param description A longer description of the object.
    * @param examinable Whether the object can be examined.
    */
-  constructor(name: string, description: string, examinable: boolean) {
+  constructor(
+    name: string,
+    description: string,
+    examinable: boolean,
+    contents: GameObject[]
+  ) {
     this.name = name;
     this.description = description;
     this.examinable = examinable;
+    this.contents = contents;
   }
 
   /**
@@ -33,5 +41,26 @@ export  class GameObject implements GameObjectInterface {
     } else {
       return `There's nothing significant about the ${this.name}`
     }
+  }
+
+  /**
+   * Implement this method in the concrete class if the object is openable.
+   */
+  open(): any {
+    throw new Error('Method not implemented.');
+  }
+
+  /**
+   * Implement this method in the concrete class if the object is openable.
+   */
+  close(): any {
+    throw new Error('Method not implemented.');
+  }
+
+  /**
+   * Implement this method in the concrete class if the object is openable.
+   */
+  removeContent(_object: GameObject): void {
+    throw new Error('Method not implemented.');
   }
 }

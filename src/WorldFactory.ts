@@ -11,8 +11,8 @@ export class WorldFactory {
   static createDefaultWorld(): World {
     // TODO: Read "map" data from file
     const frontYard = new Room('front yard', 'You are in the front yard. The grass is mostly dead and overgrown. The air is crisp and the sky is cloudy.', []);
-    const letter = new Item('letter', "addressed to you.", false);
-    const mailBox = new Item('mailbox', "rather unassuming, but perhaps there's something inside?", true, [letter]);
+    const letter = new Item('letter', "addressed to you.", false, true);
+    const mailBox = new Item('mailbox', "rather unassuming, but perhaps there's something inside?", true, false, false, false, [letter]);
 
     const livingRoom = new Room('living room', 'You are in the living room.', []);
     const couch = new Item('couch', "chic, midcentury modern and brown of color; though it's not as comfortable as you'd like it to be.");

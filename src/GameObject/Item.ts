@@ -2,7 +2,9 @@ import { GameObject } from './GameObject';
 
 export class Item extends GameObject {
   openable: boolean;
+  takeable: boolean;
   isOpen: boolean;
+  isTaken: boolean;
   contents: GameObject[];
 
   /**
@@ -17,12 +19,17 @@ export class Item extends GameObject {
     name: string,
     description: string,
     openable: boolean = false,
+    takeable: boolean = false,
+    isOpen: boolean = false,
+    isTaken: boolean = false,
     contents: GameObject[] = []
   ) {
     super(name, description, true);
 
     this.openable = openable;
-    this.isOpen = false;
+    this.takeable = takeable;
+    this.isOpen = isOpen;
+    this.isTaken = isTaken;
     this.contents = contents;
   }
 

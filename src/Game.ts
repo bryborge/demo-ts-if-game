@@ -54,6 +54,7 @@ export class Game implements GameInterface {
 
     while (this.running) {
       console.log(this.player.describeCurrentLocation());
+      console.log(this.player.listInventory());
 
       const commandInput = await userCommand('> ');
       const command      = this.parser.parse(commandInput);
@@ -78,10 +79,12 @@ export class Game implements GameInterface {
       this.running = false;
     } else if (action === 'move' || action === 'go') {
       this.handleMovement(target);
-    } else if (action === 'examine' ) {
+    } else if (action === 'examine') {
       this.handleExamine(target);
-    } else if (action === 'open' ) {
+    } else if (action === 'open') {
       this.handleOpen(target);
+    } else if (action === 'take') {
+      this.handleTake(target);
     } else {
       console.log(`I don't understand the command: ${action}`);
     }
@@ -112,7 +115,7 @@ export class Game implements GameInterface {
    * @returns void
    */
   handleExamine(target: string): void {
-    const targetObject = this.player.location.getObject(target);
+    const targetObject = this.player.location.getObject(target) || this.player.getItemFromInventory(target);
 
     if (targetObject) {
       console.log(this.player.examineObject(targetObject));
@@ -138,6 +141,24 @@ export class Game implements GameInterface {
       if (contents.length > 0) {
         contents.forEach((item: GameObject) => this.player.location.addObject(item));
       }
+    } else {
+      console.log(this.handleNoTarget(target));
+    }
+  }
+
+  /**
+   * Handles a take command, given as a target string.
+   *
+   * @param target The target of the interaction, or null if not a valid interaction
+   * command. If null, a message is printed to the user that they can't do that.
+   * @returns void
+   */
+  handleTake(target: string): void {
+    const targetObject = this.player.location.getObject(target) || this.player.getItemFromInventory(target);
+
+    if (targetObject) {
+      console.log(this.player.takeObject(targetObject));
+      this.player.location.removeObject(targetObject);
     } else {
       console.log(this.handleNoTarget(target));
     }

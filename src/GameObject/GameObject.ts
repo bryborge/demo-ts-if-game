@@ -1,9 +1,11 @@
 import { GameObjectInterface } from "../common/interfaces";
 
 export  class GameObject implements GameObjectInterface {
-   name: string;
-   description: string;
-   examinable: boolean;
+  name: string;
+  description: string;
+  examinable: boolean;
+  isTaken: any;
+  takeable: any;
 
   /**
    * Initializes a new instance of GameObject.
@@ -12,7 +14,11 @@ export  class GameObject implements GameObjectInterface {
    * @param description A longer description of the object.
    * @param examinable Whether the object can be examined.
    */
-  constructor(name: string, description: string, examinable: boolean) {
+  constructor(
+    name: string,
+    description: string,
+    examinable: boolean
+  ) {
     this.name = name;
     this.description = description;
     this.examinable = examinable;

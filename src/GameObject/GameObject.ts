@@ -1,6 +1,5 @@
 import { GameObjectInterface } from "../common/interfaces";
 
-// TODO: Make this an abstract class
 export  class GameObject implements GameObjectInterface {
    name: string;
    description: string;
@@ -35,6 +34,9 @@ export  class GameObject implements GameObjectInterface {
     }
   }
 
+  /**
+   * Implement this method in the concrete class if the object is openable.
+   */
   open(): any {
     throw new Error('Method not implemented.');
   }

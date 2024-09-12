@@ -14,12 +14,22 @@ export class Room implements RoomInterface {
    * @param description A longer description of the room.
    */
   constructor(name: string, description: string, objects: GameObject[]) {
-    this.name        = name;
+    this.name = name;
     this.description = description;
-    this.exits       = {};
-    this.objects     = objects;
+    this.exits = {};
+    this.objects = objects;
   }
 
+  /**
+   * Returns a string describing the room.
+   *
+   * The description is structured as follows:
+   * - The room description
+   * - A list of objects in the room
+   * - A list of directions that the user can go
+   *
+   * @returns A string describing the room.
+   */
   describe(): string {
     let fullDescription = `${this.description}\n\tObjects: `;
 
@@ -54,6 +64,19 @@ export class Room implements RoomInterface {
   }
 
   /**
+   * Gets an object from the room by name.
+   *
+   * @param name The name of the object to retrieve.
+   * @returns The object with the given name, or undefined if no object with that
+   * name exists in the room.
+   */
+  getObject(name: string): GameObject | undefined {
+    const object = this.objects.find(o => o.name === name);
+
+    return object;
+  }
+
+  /**
    * Removes the given object from the room.
    *
    * @param object The object to remove.
@@ -70,19 +93,6 @@ export class Room implements RoomInterface {
    */
   describeObject(object: GameObject): string {
     return object.describe();
-  }
-
-  /**
-   * Gets an object from the room by name.
-   *
-   * @param name The name of the object to retrieve.
-   * @returns The object with the given name, or undefined if no object with that
-   * name exists in the room.
-   */
-  getObject(name: string): GameObject | undefined {
-    const object = this.objects.find(o => o.name === name);
-
-    return object;
   }
 
   /**

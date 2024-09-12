@@ -27,7 +27,13 @@ export class Item extends GameObject {
   }
 
   /**
-   * Opens the item, if it is openable and has not been opened before.
+   * Opens the item and returns a message and the contents of the item, if any.
+   *
+   * If the item is openable and not already open, the message will describe the contents of the item.
+   * If the item is openable and already open, the message will indicate that the item is already open.
+   * If the item is not openable, the message will indicate that the item cannot be opened.
+   *
+   * @returns An object with a message and the contents of the item.
    */
   open(): { message: string, contents: GameObject[] } {
     if (this.openable) {

@@ -105,13 +105,13 @@ export class Game implements GameInterface {
   }
 
   /**
-   * Handles an interaction command, given as a target string.
+   * Handles an examine command, given as a target string.
    *
    * @param target The target of the interaction, or null if not a valid interaction
    * command. If null, a message is printed to the user that they can't do that.
    * @returns void
    */
-  handleExamine(target: string ): void {
+  handleExamine(target: string): void {
     const targetObject = this.player.location.getObject(target);
 
     if (targetObject) {
@@ -121,6 +121,13 @@ export class Game implements GameInterface {
     }
   }
 
+  /**
+   * Handles an open command, given as a target string.
+   *
+   * @param target The target of the interaction, or null if not a valid interaction
+   * command. If null, a message is printed to the user that they can't do that.
+   * @returns void
+   */
   handleOpen(target: string): void {
     const targetObject = this.player.location.getObject(target);
 
@@ -136,6 +143,13 @@ export class Game implements GameInterface {
     }
   }
 
+  /**
+   * A helper function that returns a string that is used when the user tries to interact with something
+   * that doesn't exist in the current room.
+   *
+   * @param target The target of the interaction, which doesn't exist in the current room.
+   * @returns A string indicating that the target doesn't exist in the current room.
+   */
   handleNoTarget(target: string): string {
     return `There is no ${target} here.`
   }

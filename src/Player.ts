@@ -81,10 +81,10 @@ export class Player implements PlayerInterface {
   /**
    * Returns a string describing the player's current inventory.
    *
-   * If the inventory is not empty, the string will be in the format:
-   *   \tInventory: object1, object2, ...
+   * If the inventory is not empty, the string will be:
+   *   Inventory: object1, object2, ...
    * If the inventory is empty, the string will be:
-   *   \tInventory: <empty>
+   *   Inventory: <empty>
    */
   listInventory(): string {
     if (this.inventory.length > 0) {

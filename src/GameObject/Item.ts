@@ -48,7 +48,7 @@ export class Item extends GameObject {
         this.isOpen = true;
         const contentNames = this.contents.map(obj => obj.name).join(', ');
         const message = this.contents.length > 0
-          ? `You open the ${this.name}. Inside, you find: ${contentNames}.`
+          ? `You open the ${this.name}. A ${contentNames} fell out.`
           : `You open the ${this.name}, but it's empty.`;
         return  { message, contents: this.contents };
       } else {

@@ -6,7 +6,7 @@ import { World } from "../World";
 
 export interface Command {
   action: string;
-  target: string;
+  target: string | null;
 };
 
 export interface GameInterface {

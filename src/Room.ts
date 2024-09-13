@@ -26,20 +26,17 @@ export class Room implements RoomInterface {
    * The description is structured as follows:
    * - The room description
    * - A list of objects in the room
-   * - A list of directions that the user can go
    *
    * @returns A string describing the room.
    */
   describe(): string {
-    let fullDescription = `${this.description}\n\tObjects: `;
+    let fullDescription = `${this.description}\nThere is a `;
 
     if (this.objects.length > 0) {
-      fullDescription += this.objects.map(o => o.name).join(', ');
+      fullDescription += this.objects.map(o => o.name).join(', a ') + ' here. ';
     } else {
-      fullDescription += "There appears to be nothing here.";
+      fullDescription += "There appears to be nothing here. ";
     }
-
-    fullDescription += `\n\tDirections: ${Object.keys(this.exits).join(', ')}`
 
     return fullDescription;
   }
@@ -70,7 +67,7 @@ export class Room implements RoomInterface {
    * @returns The object with the given name, or undefined if no object with that
    * name exists in the room.
    */
-  getObject(name: string): GameObject | undefined {
+  getObject(name: string | null): GameObject | undefined {
     const object = this.objects.find(o => o.name === name);
 
     return object;

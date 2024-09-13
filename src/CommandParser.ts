@@ -7,13 +7,15 @@ export class CommandParser {
    * @param command The string to parse.
    * @returns A Command object with the action and target.
    */
-  parse(command: string): Command {
-    // TODO: Make parser more robust
-    const words = command.split(' ');
-    const action = words[0];
-    const target = words[1];
+  parse(input: string): Command {
+    const normalizedAction = input.trim().toLowerCase();
 
-    // TODO: Handle invalid actions / targets
-    return { action, target };
+    if (normalizedAction === 'i' || normalizedAction === 'inventory') {
+      return { action: 'inventory', target: null };
+    }
+
+    // TODO: support cases where the actions mean the same thing (e.g. walk, go, move; or examine, look, etc.)
+    const [action, target] = normalizedAction.split(' ', 2);
+    return { action, target: target || null };
   }
 }

@@ -30,7 +30,7 @@ export class Player implements PlayerInterface {
 
     if (nextRoom) {
       this.location = nextRoom;
-      return `You move ${direction}.`;
+      return `You move ${direction}.\n${this.location.describe()}`;
     } else {
       return `You can't go ${direction} from here.`;
     }
@@ -80,19 +80,12 @@ export class Player implements PlayerInterface {
   }
 
   /**
-   * Returns a string describing the player's current inventory.
+   * Returns the player's current inventory.
    *
-   * If the inventory is not empty, the string will be:
-   *   Inventory: object1, object2, ...
-   * If the inventory is empty, the string will be:
-   *   Inventory: <empty>
+   * @returns An array of objects that the player is currently carrying.
    */
-  listInventory(): string {
-    if (this.inventory.length > 0) {
-      return `\tInventory: ${this.inventory.map(o => o.name).join(', ')}`;
-    } else {
-      return "\tInventory: <empty>";
-    }
+  getInventory(): GameObject[] {
+    return this.inventory;
   }
 
   /**
@@ -101,7 +94,7 @@ export class Player implements PlayerInterface {
    * @param target The name of the object to find.
    * @returns The object with the given name, or undefined if no object with that name is in the player's inventory.
    */
-  getItemFromInventory(target: string): GameObject | undefined {
+  getItemFromInventory(target: string | null): GameObject | undefined {
     return this.inventory.find(o => o.name === target);
   }
 

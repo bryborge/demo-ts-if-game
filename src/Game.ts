@@ -51,15 +51,14 @@ export class Game implements GameInterface {
   async gameLoop(): Promise<void> {
     console.log('Mind Palace');
     console.log('');
+    console.log(this.player.describeCurrentLocation());
+    console.log('');
 
     while (this.running) {
-      console.log(this.player.describeCurrentLocation());
-      console.log(this.player.listInventory());
-
       const commandInput = await userCommand('> ');
-      const command      = this.parser.parse(commandInput);
+      const { action, target } = this.parser.parse(commandInput);
 
-      this.handleCommand(command);
+      this.handleCommand({ action, target });
     }
   }
 
@@ -72,26 +71,37 @@ export class Game implements GameInterface {
   handleCommand(command: Command): void {
     const { action, target } = command;
 
-    console.log('');
-
-    if (action === 'quit') {
-      console.log('Thanks for playing! Goodbye.')
-      this.running = false;
-    } else if (action === 'move' || action === 'go') {
-      this.handleMovement(target);
-    } else if (action === 'examine') {
-      this.handleExamine(target);
-    } else if (action === 'open') {
-      this.handleOpen(target);
-    } else if (action === 'close') {
-      this.handleClose(target);
-    } else if (action === 'take') {
-      this.handleTake(target);
-    } else if (action === 'drop') {
-      this.handleDrop(target);
-    } else {
-      console.log(`I don't understand the command: ${action}`);
+    switch (action) {
+      case 'quit':
+        console.log('Thanks for playing! Goodbye.');
+        this.running = false;
+        break;
+      case 'move':
+        this.handleMovement(target);
+        break;
+      case 'examine':
+        this.handleExamine(target);
+        break;
+      case 'open':
+        this.handleOpen(target);
+        break;
+      case 'close':
+        this.handleClose(target);
+        break;
+      case 'take':
+        this.handleTake(target);
+        break;
+      case 'drop':
+        this.handleDrop(target);
+        break;
+      case 'inventory':
+        this.handleShowInventory();
+        break;
+      default:
+        console.log(`I don't understand the command: ${action}`);
     }
+
+    console.log('');
   }
 
   /**
@@ -106,8 +116,6 @@ export class Game implements GameInterface {
   handleMovement(direction: string | null): void {
     if (direction) {
       console.log(this.player.move(direction));
-    } else {
-      console.log("You can't go that way.");
     }
   }
 
@@ -118,7 +126,7 @@ export class Game implements GameInterface {
    * command. If null, a message is printed to the user that they can't do that.
    * @returns void
    */
-  handleExamine(target: string): void {
+  handleExamine(target: string | null): void {
     const targetObject = this.player.location.getObject(target) || this.player.getItemFromInventory(target);
 
     if (targetObject) {
@@ -135,7 +143,7 @@ export class Game implements GameInterface {
    * command. If null, a message is printed to the user that they can't do that.
    * @returns void
    */
-  handleOpen(target: string): void {
+  handleOpen(target: string | null): void {
     const targetObject = this.player.location.getObject(target);
 
     if (targetObject) {
@@ -160,7 +168,7 @@ export class Game implements GameInterface {
    * command. If null, a message is printed to the user that they can't do that.
    * @returns void
    */
-  handleClose(target: string): void {
+  handleClose(target: string | null): void {
     const targetObject = this.player.location.getObject(target);
 
     if (targetObject) {
@@ -177,7 +185,7 @@ export class Game implements GameInterface {
    * command. If null, a message is printed to the user that they can't do that.
    * @returns void
    */
-  handleTake(target: string): void {
+  handleTake(target: string | null): void {
     const targetObjectInRoom = this.player.location.getObject(target);
     const targetObjectInInventory = this.player.getItemFromInventory(target);
 
@@ -199,7 +207,7 @@ export class Game implements GameInterface {
    * command. If null, a message is printed to the user that they can't do that.
    * @returns void
    */
-  handleDrop(target: string): void {
+  handleDrop(target: string | null): void {
     const targetObject = this.player.getItemFromInventory(target);
 
     if (targetObject) {
@@ -212,13 +220,36 @@ export class Game implements GameInterface {
   }
 
   /**
+   * Handles the command to show the player's inventory.
+   *
+   * If the player is not carrying anything, prints "You are not carrying anything.".
+   * Otherwise, prints "You are carrying:" followed by a list of the items the player
+   * is carrying.
+   *
+   * @returns void
+   */
+  handleShowInventory(): void {
+    const inventory = this.player.getInventory();
+
+    if (inventory.length > 0) {
+      console.log("You are carrying:");
+
+      inventory.forEach((item: GameObject) => {
+        console.log(`- ${item.name}`);
+      });
+    } else {
+      console.log("You are not carrying anything.");
+    }
+  }
+
+  /**
    * A helper function that returns a string that is used when the user tries to interact with something
    * that doesn't exist in the current room.
    *
    * @param target The target of the interaction, which doesn't exist in the current room.
    * @returns A string indicating that the target doesn't exist in the current room.
    */
-  handleNoTarget(target: string): string {
+  handleNoTarget(target: string | null): string {
     return `There is no ${target} here.`
   }
 }

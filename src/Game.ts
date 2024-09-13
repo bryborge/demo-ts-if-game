@@ -229,7 +229,7 @@ export class Game implements GameInterface {
    * @returns void
    */
   handleShowInventory(): void {
-    const inventory = this.player.getInventory();
+    const inventory = this.player.getInventoryItems();
 
     if (inventory.length > 0) {
       console.log("You are carrying:");

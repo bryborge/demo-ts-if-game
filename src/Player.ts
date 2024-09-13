@@ -84,7 +84,7 @@ export class Player implements PlayerInterface {
    *
    * @returns An array of objects that the player is currently carrying.
    */
-  getInventory(): GameObject[] {
+  getInventoryItems(): GameObject[] {
     return this.inventory;
   }
 
